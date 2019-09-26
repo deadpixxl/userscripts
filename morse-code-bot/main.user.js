@@ -13,7 +13,7 @@
 
 	// Your code here...
 	let code = `
-		<div class="withbg" style="position:fixed;top:10px;left:0;width:200px;height:210px;font-size:14px;10px;">
+		<div class="withbg" style="position:fixed;top:10px;left:0;width:200px;height:240px;font-size:14px;10px;">
 			<p style="font-size:18px;">Morse Code Bot<br /><span style="font-size:14px;">by deadpixl</span></p>
 			<p></p>
 			<p>wpm<br />
@@ -21,7 +21,8 @@
 			<p></p>
 			<p>message<br />
 			<textarea id="customMessageTextarea" placeholder="enter message..." style="width:180px;height:50px;background:transparent;border:1px solid white;color:white;font-family:"Cutive Mono", monospace;"></textarea></p>
-			<p></p><p><span id="customSendButton" style="cursor:pointer;">[send]</span> <span id="customPeriodButton" style="cursor:pointer;color:red;";>[manual]</span></p>
+			<p></p><p><span id="customSendButton" style="cursor:pointer;">[send]</span></p>
+			<p></p><p><span id="customPeriodButton" style="cursor:pointer;color:red;">[manual]</span>  <span id="customWelcomeButton" style="cursor:pointer;color:red;">[welcome]</span></p>
 		</div>
 		<style>
 			#customMessageTextarea:focus
@@ -38,7 +39,38 @@
 	let theMessage;
 	let messageLocation;
 	let unitLength = 100;
+	let finishedKeying = true;
 	let periodEnabled = false;
+	let welcomeEnabled = false;
+
+	// define a new console
+	var console=(function(oldCons){
+	    return {
+	        log: function(text){
+	            oldCons.log(text);
+	            // Your code
+	            if (String(text).indexOf("joined channel") > -1 && welcomeEnabled && finishedKeying)
+	            {
+	            	sendMessage("hello, " + text.substr(0,4).toLowerCase() + "!");
+	            }
+	        },
+	        info: function (text) {
+	            oldCons.info(text);
+	            // Your code
+	        },
+	        warn: function (text) {
+	            oldCons.warn(text);
+	            // Your code
+	        },
+	        error: function (text) {
+	            oldCons.error(text);
+	            // Your code
+	        }
+	    };
+	}(window.console));
+
+	//Then redefine the old console
+	window.console = console;
 
 	setUnitLength(15);
 
@@ -49,6 +81,7 @@
 	}
 
 	function sendMessage(msg) {
+		finishedKeying = false;
 	    theMessage = "";
 	    messageLocation = 0;
 	    for (let i = 0; i < msg.length; i++) {
@@ -59,6 +92,7 @@
 
 	function sendCharacter() {
 	    if (messageLocation > theMessage.length) {
+	    	finishedKeying = true;
 	        console.log("done!");
 	        return
 	    }
@@ -156,6 +190,12 @@
 		periodEnabled = !periodEnabled;
 		$("#customPeriodButton").css("color", periodEnabled ? "green" : "red");
 	});
+
+	$("#customWelcomeButton").click(function(e)
+	{
+		welcomeEnabled = !welcomeEnabled;
+		$("#customWelcomeButton").css("color", welcomeEnabled ? "green" : "red");
+	})
 
 	$(document).keydown(function(e)
 	{
