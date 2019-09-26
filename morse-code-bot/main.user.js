@@ -21,7 +21,7 @@
 			<p></p>
 			<p>message<br />
 			<textarea id="customMessageTextarea" placeholder="enter message..." style="width:180px;height:50px;background:transparent;border:1px solid white;color:white;font-family:"Cutive Mono", monospace;"></textarea></p>
-			<p></p><p id="customSendButton" style="cursor:pointer;">[send]</p>
+			<p></p><p><span id="customSendButton" style="cursor:pointer;">[send]</span> <span id="customPeriodButton" style="cursor:pointer;color:red;";>[manual]</span></p>
 		</div>
 		<style>
 			#customMessageTextarea:focus
@@ -38,6 +38,7 @@
 	let theMessage;
 	let messageLocation;
 	let unitLength = 100;
+	let periodEnabled = false;
 
 	setUnitLength(15);
 
@@ -150,6 +151,12 @@
 		$("#customMessageTextarea").val("");
 	});
 
+	$("#customPeriodButton").click(function(e)
+	{
+		periodEnabled = !periodEnabled;
+		$("#customPeriodButton").css("color", periodEnabled ? "green" : "red");
+	});
+
 	$(document).keydown(function(e)
 	{
 		if (e.which == 13)
@@ -157,7 +164,22 @@
 			$("#customSendButton").click();
 			e.preventDefault();
 		}
+
+		if (e.which == 190)
+		{
+			if (!periodEnabled) { return; }
+			app.morsers.me.keyDown();
+		}
 	});
+
+	$(document).keyup(function(e)
+	{
+		if (e.which == 190)
+		{
+			if (!periodEnabled) { return; }
+			app.morsers.me.keyUp();
+		}
+	})
 
 	$("#customWpmInput").change(function(e)
 	{
@@ -171,5 +193,5 @@
 	$("#customWpmInput").focus(function(e)
 	{
 		$(this).select();
-	})
+	});
 })();
