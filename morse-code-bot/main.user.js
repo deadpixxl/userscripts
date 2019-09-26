@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Morse Code Bot
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  A bot to send morse code messages on morsecode.me
 // @author       deadpixl
 // @match        http://morsecode.me/*
