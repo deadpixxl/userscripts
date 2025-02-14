@@ -1,3 +1,3 @@
 # userscripts
 
-A collection of my UserScripts.
+A collection of userscripts I've made for my own personal use.
